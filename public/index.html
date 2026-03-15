@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h3>Express Server Home Page</h3>
+
+    <button onclick="postDataToServer()">Post JSON data</button>
+
+    <script>
+        async function postJsonData(url, data) {
+            try {
+                const response = await fetch(url, {
+                    method: 'POST', // Specify the method
+                    headers: {
+                        'Content-Type': 'application/json' // Declare the type of content being sent
+                    },
+                    body: JSON.stringify(data) // Convert the JavaScript object to a JSON string
+                });
+
+                // Check if the request was successful
+                if (!response.ok) {
+                    // If the response is not OK, throw an error with the status
+                    throw new Error(`Network response was not ok: ${response.statusText}`);
+                }
+
+                // Parse the JSON response from the server
+                const responseData = await response.json();
+
+                return responseData; // Return the parsed data
+
+            } catch (error) {
+                // Catch and handle any errors that occurred during the fetch operation or in the promise chain
+                console.error('Error posting data:', error);
+                throw error; // Re-throw the error if necessary for the caller to handle
+            }
+        }
+
+        // --- Example Usage ---
+
+        function postDataToServer() {
+            // Define the data you want to send
+            const postData = {
+                name: 'Test User',
+                id: 12345,
+                active: true
+            };
+
+            // Define the URL of the API endpoint you are posting to
+            // Note: You must replace this with a real, working API endpoint.
+            const apiEndpointUrl = 'http://localhost:3000/api/data';
+
+            // Call the function and handle the result
+            postJsonData(apiEndpointUrl, postData)
+                .then(data => {
+                    console.log('Success:', data);
+                })
+                .catch(error => {
+                    console.error('Failed to post data:', error.message);
+                });
+        }
+    </script>
+</body>
+
+</html>
